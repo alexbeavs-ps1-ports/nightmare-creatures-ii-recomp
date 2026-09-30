@@ -44,6 +44,8 @@ set(PSX_SETUP_WIZARD ON CACHE BOOL
 # which declares this as a CACHE STRING.
 set(PSXRECOMP_BIOS_STEMS "SCPH1001" CACHE STRING
     "Recompiled BIOS stems to link; retail-only kit ships no OpenBIOS payload")
+set(PSXRECOMP_BIOS_STEM "SCPH1001" CACHE STRING "Accepted BIOS" FORCE)
+set(PSXRECOMP_BIOS_PROFILE "${PSXRECOMP_ROOT}/bios/SCPH1001.toml" CACHE FILEPATH "Accepted BIOS" FORCE)
 
 include("${PSXRECOMP_ROOT}/runtime/runtime.cmake")
 

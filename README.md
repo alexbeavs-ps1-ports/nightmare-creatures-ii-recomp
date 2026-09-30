@@ -23,6 +23,10 @@ generated game code, or saved game.
 | Supported dump | Redump `Nightmare Creatures II (USA).cue` as CUE/BIN or CHD |
 | BIOS | SCPH-1001 (USA), 524288 bytes, SHA-256 `71af94d1e47a68c11e8fdb9f8368040601514a42a5a399cda48c7d3bff1e99d3` |
 
+<!-- release-standard:bios -->
+**BIOS:** SCPH-1001 (USA) retail BIOS, 524288 bytes, SHA-256 `71af94d1e47a68c11e8fdb9f8368040601514a42a5a399cda48c7d3bff1e99d3`. Supply your own dump; releases do not use OpenBIOS.
+<!-- /release-standard:bios -->
+
 ## Setup
 
 1. Download the setup ZIP for your platform from [Releases](https://github.com/Alexbeav/nightmare-creatures-ii-recomp/releases)
