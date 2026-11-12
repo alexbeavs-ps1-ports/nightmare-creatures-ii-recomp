@@ -24,6 +24,21 @@ from audit_macos_setup import audit as audit_mac, version_number
 from audit_setup_package_platform_copy import audit as audit_copy
 
 
+# Known issue PS1B-154, accepted for these releases: the macOS setup program links three Homebrew libraries.
+# Only these lines of the macOS audit are waived, and only for the root setup program; each one is
+# written to the gate file. Any other external dependency, or one in a code generator, still fails.
+WAIVED_MACOS_DEPENDENCY = re.compile(
+    r'external non-system dependency (?:/opt/homebrew|/usr/local)/opt/'
+    r'(?:openssl@[0-9]+/lib/libcrypto|freetype/lib/libfreetype|harfbuzz/lib/libharfbuzz)\.[0-9]+\.dylib')
+
+
+def waived_macos_errors(errors, exe):
+    prefix = str(exe) + ': '
+    return [e for e in errors
+            if exe and '/' not in str(exe) and e.startswith(prefix)
+            and WAIVED_MACOS_DEPENDENCY.fullmatch(e[len(prefix):])]
+
+
 def digest(path):
     h = hashlib.sha256()
     with Path(path).open('rb') as stream:
@@ -197,7 +212,11 @@ def check_package(path, expected, platform, native=False, macos='11.0'):
         if platform.startswith('macos'):
             mac = audit_mac(result, version_number(macos))
             result['macos'] = mac
-            problems.extend(mac['errors'])
+            waived = waived_macos_errors(mac['errors'], exe)
+            result['waived'] = waived
+            if waived:
+                result['checks']['macos_dependencies'] = 'waived'
+            problems.extend(e for e in mac['errors'] if e not in waived)
         if native and not problems:
             if native_platform() != platform:
                 problems.append('native smoke requested on wrong operating system or architecture')
